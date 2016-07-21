@@ -60,11 +60,9 @@ namespace JsonWebTokenSample
           Configuration = builder.Build();
 
 
-            // TODO: setup logging.
-            
-    
+     
 
-           string keyfilename = RSAKeyUtils.InitializeKeyArtifacts(env.WebRootPath, _keyArtifacts);
+            string keyfilename = RSAKeyUtils.InitializeKeyArtifacts(env.WebRootPath, _keyArtifacts);
           //  Log.Warning($"Auth-Environment: {env.EnvironmentName} ");
           //  Log.Warning($"Auth-artifact: {_keyArtifacts}");
           //  Log.Warning($"Auth-secret:{keyfilename}");
@@ -73,6 +71,7 @@ namespace JsonWebTokenSample
 
         }
 
+        public static ILogger Logger { get; set; }
         public static IConfigurationRoot Configuration { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container
@@ -173,41 +172,28 @@ namespace JsonWebTokenSample
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddConsole(LogLevel.Debug);
             loggerFactory.AddDebug();
             //loggerFactory.AddSerilog();  // TODO: Add logging.
 
+            Logger = loggerFactory.CreateLogger("Startup");
+            Logger.LogInformation("Starting up demo");
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-                app.UseBrowserLink();
-            }
-            else
-            {
-                // app.UseExceptionHandler("/Home/Error");
-                //Extension in Middle-ware:Add Exception Handler to catch all exception happening in the pipeline
 
-                // app.UseMyExceptionHandler();  /// TODO: Make JsonWebTokenSample.Fhir.Api.Middlewares general and move to common.
-            }
+            // developer/demo options only
+            app.UseDeveloperExceptionPage();
+            app.UseDatabaseErrorPage();
+            app.UseBrowserLink();
+         
 
-            if (Configuration != null) // disable telemetry during integration tests.
-            {
-                var enableTelemetry = Configuration["Telemetry"];
-                if (enableTelemetry == "true")
-                {
-                    app.UseApplicationInsightsRequestTelemetry();
-                    app.UseApplicationInsightsExceptionTelemetry();
-                }
-            }
-
+            
             app.UseJwtBearerAuthentication(_keyArtifacts.getJwtBearerOptions());
 
             app.UseStaticFiles();
 
             app.UseMvc();
 
+            
 
         }
 

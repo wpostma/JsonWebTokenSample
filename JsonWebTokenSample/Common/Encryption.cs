@@ -86,7 +86,7 @@ namespace JsonWebTokenSample.Common
             return jwtBearerOptions;
         }
 
-        // The test code
+        // More test code
         /*
         public static string GenerateAccessToken()
         {
