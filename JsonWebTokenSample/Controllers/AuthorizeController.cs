@@ -118,9 +118,14 @@ namespace JsonWebTokenSample.Controllers
                         .OfType<JwtSecurityTokenHandler>()
                         .First();
 
+            //     BearerOptions.
+
                     var tokenData = new SecurityTokenDescriptor
                     {
-                        
+                        // Without this, you get IDX10504
+                        // SigningCredentials comes from a controller constructor parameter.
+                        SigningCredentials = this.SigningCredentials,
+
                         Issuer = BearerOptions.TokenValidationParameters.ValidIssuer,
                         Audience = BearerOptions.TokenValidationParameters.ValidAudience,
                         Subject = new ClaimsIdentity(claims),
