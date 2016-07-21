@@ -9,15 +9,24 @@ Problem with this code:
 
 1. Run it inside the IDE, so you can see the Console Log Output.
 
-2. From a command prompt run "python test\testloginapi.py" (requires python 3)
+2. From a command prompt run "python tests\testloginapi.py" (requires python 3)
 
-3. The test does a POST to http://localhost:54993/authorize/login?username=TEST&password=SECRET
+        d:\dev\JsonWebTokenSample>python tests\testloginapi.py
+        GET OK: 200 http://localhost:54993/authorize/login?username=TEST&pas...
+        POST OK: 200 http://localhost:54993/authorize/login?username=TEST&pas...
+        authorization token received... eyJhbGciOi...
+        expected status 200 but got 401 for GET http://localhost:54993/authorizetest/test
+
+3. The test does a POST to `http://localhost:54993/authorize/login?username=TEST&password=SECRET`
+
 
 3. The demo app returns a token something like this:
-    eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1bmlxdWVfbmFtZSI6IlRFU1QiLCJuYmYiOjE0NjkxMDc0NzUsImV4cCI6MTQ2OTE5Mzg3NSwiaWF0IjoxNDY5MTA3NDc1LCJpc3MiOiJEVU1NWSIsImF1ZCI6IkRVTU1ZL3Jlc291cmNlcyJ9.
+
+
+      eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1bmlxdWVfbmFtZSI6IlRFU1QiLCJuYmYiOjE0NjkxMDc0NzUsImV4cCI6MTQ2OTE5Mzg3NSwiaWF0IjoxNDY5MTA3NDc1LCJpc3MiOiJEVU1NWSIsImF1ZCI6IkRVTU1ZL3Jlc291cmNlcyJ9.
 
 4. Now we try to use that token, as an HTTP header and make a GET request to a "secured" asp.net mvc api.
-    http://localhost:54993/authorizetest/test  
+   `http://localhost:54993/authorizetest/test  `
 
 5. Now we get this error:
 
